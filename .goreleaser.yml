@@ -1,0 +1,46 @@
+version: 2
+
+release:
+  mode: replace
+
+builds:
+  - main: ./cmd/reap
+    binary: reap
+    env:
+      - CGO_ENABLED=0
+    goos:
+      - darwin
+      - linux
+    goarch:
+      - amd64
+      - arm64
+
+archives:
+  - formats:
+      - tar.gz
+    name_template: "{{ .ProjectName }}_{{ .Os }}_{{ .Arch }}"
+
+checksum:
+  name_template: "checksums.txt"
+
+changelog:
+  sort: asc
+
+nfpms:
+  - package_name: reap
+    vendor: legostin
+    homepage: https://github.com/legostin/reap
+    maintainer: legostin
+    description: Interactive TUI for viewing and killing processes on ports
+    license: MIT
+    formats:
+      - deb
+
+brews:
+  - repository:
+      owner: legostin
+      name: homebrew-tap
+      token: "{{ .Env.HOMEBREW_TAP_GITHUB_TOKEN }}"
+    directory: Formula
+    homepage: "https://github.com/legostin/reap"
+    description: "Interactive TUI for viewing and killing processes on ports. Like htop meets lsof."
